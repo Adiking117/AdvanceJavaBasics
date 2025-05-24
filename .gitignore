@@ -9,7 +9,9 @@
 *.nar
 hs_err_pid*
 replay_pid*
-/Utilities
+/Utilities/api-docs
+/Utilities/apache-tomcat-10.1.26
+
 ##############################
 ## Maven
 ##############################
