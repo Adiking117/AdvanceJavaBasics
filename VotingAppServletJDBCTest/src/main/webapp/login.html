@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Form</title>
+    <style>
+      /* Reset some basic elements for consistency */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      /* Body styling using a gradient background and centered content */
+      body {
+        background: linear-gradient(45deg, #83a4d4, #b6fbff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      
+      /* Form container styling */
+      form {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Table styles for proper spacing */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      td {
+        padding: 8px 12px;
+      }
+      
+      /* Label styling (if you later add explicit label tags) */
+      td:first-child {
+        font-weight: bold;
+        text-align: right;
+        white-space: nowrap;
+      }
+      
+      /* Input field styling */
+      input[type="email"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        outline: none;
+      }
+      
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: #007BFF;
+      }
+      
+      /* Submit button styling */
+      input[type="submit"] {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      
+      /* Center the table within the form */
+      table {
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="login" method="post">
+      <table>
+        <tr>
+          <td>Enter User Email</td>
+          <td><input type="email" name="em" required /></td>
+        </tr>
+        <tr>
+          <td>Enter Password</td>
+          <td><input type="password" name="pass" required /></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: center;">
+            <input type="submit" value="Login" />
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>
