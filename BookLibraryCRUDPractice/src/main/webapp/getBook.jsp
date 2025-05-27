@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.adi.library.entity.Book" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,49 +8,51 @@
     <title>Get Book Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            text-align: center;
+            padding: 50px;
+            color: white;
         }
-        form {
-            margin-bottom: 20px;
+
+        h1 {
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-        input[type="number"] {
-            padding: 8px;
-            width: 200px;
-        }
-        button {
-            padding: 8px 16px;
-            margin-top: 8px;
-        }
+
         .book-details {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-top: 15px;
-            max-width: 400px;
+            background: white;
+            color: black;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            margin-top: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .book-details:hover {
+            transform: scale(1.05);
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .no-book {
+            font-size: 20px;
+            color: #ffd700;
         }
     </style>
 </head>
 <body>
-    <h1>Retrieve a Book by ID</h1>
 
-    <!-- Form to capture the Book ID -->
-    <form action="read" method="get">
-        <label for="bookId">Book ID:</label>
-        <input type="number" id="bookId" name="id" required>
-        <button type="submit">Get Book</button>
-    </form>
-
-<!-- 
-    <%-- If a "book" attribute exists, display the details --%>
+    <h1>Book Information</h1>
     <% 
         Object bookObj = request.getAttribute("book");
         if (bookObj != null) { 
-            // Assuming there is a Book bean with proper getters
-            Book book = (Book) bookObj; 
+            Book book = (Book) bookObj;
     %>
         <div class="book-details">
             <h2>Book Details</h2>
@@ -56,14 +60,13 @@
             <p><strong>Name:</strong> <%= book.getName() %></p>
             <p><strong>Author:</strong> <%= book.getAuthor() %></p>
             <p><strong>Stock:</strong> <%= book.getStock() %></p>
-            <p><strong>Price:</strong> <%= book.getPrice() %></p>
+            <p><strong>Price:</strong> ₹<%= book.getPrice() %></p>
         </div>
     <% 
         } else if (request.getParameter("id") != null) { 
     %>
-        <p>No book found with the provided ID.</p>
+        <p class="no-book">No book found with the provided ID.</p>
     <% } %>
-    
--->
+
 </body>
 </html>
