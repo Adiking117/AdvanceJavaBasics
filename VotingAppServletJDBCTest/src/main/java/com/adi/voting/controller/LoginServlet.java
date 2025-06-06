@@ -7,6 +7,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
@@ -19,26 +21,11 @@ import com.adi.voting.exception.UserNotFoundException;
 
 import static com.adi.voting.utils.DBUtils.*;
 
-/**
- * Servlet implementation class LoginServlet
- */
+
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-//	private UserDAOImpl userDAO;
-//	
-//	public void init(ServletConfig config) throws ServletException {
-//		try {
-//			userDAO = new UserDAOImpl();
-//			System.out.println("DAO instance created");
-//		} catch (ClassNotFoundException | SQLException e) {
-//			e.printStackTrace(); // JAVA Compiler
-//			throw new ServletException("Servlet initialization failed",e);	// Web Container
-//		}
-//	}
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		try(PrintWriter printWriter = response.getWriter()){
@@ -46,18 +33,32 @@ public class LoginServlet extends HttpServlet {
 			String emailString = request.getParameter("em");
 			String passwordString = request.getParameter("pass");
 			
-			User user = WelcomeServlet.userDAO.loginUser(emailString, passwordString);
+			HttpSession httpSession = request.getSession();
+			
+			System.out.println("session id login "+httpSession.getId());
+			System.out.println("session is new login "+httpSession.isNew());
+			
+			httpSession.setAttribute("userDAO", WelcomeServlet.userDAO);
+			httpSession.setAttribute("candidateDAO",WelcomeServlet.candidateDAO);
+			
+			UserDAOImpl userDAO = (UserDAOImpl) httpSession.getAttribute("userDAO");
+			
+			User user = userDAO.loginUser(emailString, passwordString);
 			
 			if(user == null) {
 				printWriter.print("<h5> Invalid Login , " + "Please <a href='login.html'>Retry</a></h5>");
 				throw new UserNotFoundException("User Not Found");
 			}
 			
-			String encodedUserString = URLEncoder.encode(user.toString(),"utf-8");
-			Cookie userCookie = new Cookie("userDetails", encodedUserString);
-			response.addCookie(userCookie);
+			httpSession.setAttribute("userInfo", user);
+			
+//			String encodedUserString = URLEncoder.encode(user.toString(),"utf-8");
+//			Cookie userCookie = new Cookie("userDetails", encodedUserString);
+//			response.addCookie(userCookie);
 			
 			// Tomcat uses default Cookie processor thats why encoding user details
+			
+			
 			
 			if(user.getUserRole().equals("admin")) {
 	            response.sendRedirect("admin");
@@ -65,7 +66,7 @@ public class LoginServlet extends HttpServlet {
 	            if(user.isStatus()) {
 	                response.sendRedirect("logout");
 	            } else {
-	                response.sendRedirect("candidates");
+	                response.sendRedirect("auth");
 	            }
 	        }
 			
@@ -74,10 +75,5 @@ public class LoginServlet extends HttpServlet {
 			throw new ServletException("Login failed ", e);
 		}
 	}
-//	@Override
-//	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		resp.setContentType("text/html");
-//		resp.sendRedirect(req.getContextPath() + "/login.html");
-//	}
 
 }

@@ -8,4 +8,5 @@ import com.adi.voting.pojo.UserRequest;
 public interface UserDAO {
 	User loginUser(String userEmail,String userPassword) throws SQLException;
 	boolean registerUser(UserRequest user) throws SQLException;
+	boolean updateVotingStatus(int userId) throws SQLException;
 }

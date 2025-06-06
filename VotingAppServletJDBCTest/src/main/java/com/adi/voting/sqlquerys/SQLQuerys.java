@@ -7,6 +7,22 @@ public class SQLQuerys {
 
 	private static String userAlreadyExist = "select 1 from users where email = ?";
 	
+	private static String getAllCandidatesQuery = "select * from candidates";
+	
+	private static String getCandidatesByIdQuery = "select * from candidates where candidateid = ?";
+	
+	private static String incrementCandidateVotes = "update candidates set votes = votes+1 where candidateid = ?";
+
+	private static String updateVotingStatus = "update users set status = 1 where id = ?";
+	
+	public static String getUpdateVotingStatus() {
+		return updateVotingStatus;
+	}
+
+	public static void setUpdateVotingStatus(String updateVotingStatus) {
+		SQLQuerys.updateVotingStatus = updateVotingStatus;
+	}
+
 	public static String getLoginSqlQuery() {
 		return loginSqlQuery;
 	}
@@ -29,6 +45,30 @@ public class SQLQuerys {
 
 	public static void setUserAlreadyExist(String userAlreadyExist) {
 		SQLQuerys.userAlreadyExist = userAlreadyExist;
+	}
+
+	public static String getGetAllCandidatesQuery() {
+		return getAllCandidatesQuery;
+	}
+
+	public static void setGetAllCandidatesQuery(String getAllCandidatesQuery) {
+		SQLQuerys.getAllCandidatesQuery = getAllCandidatesQuery;
+	}
+
+	public static String getGetCandidatesByIdQuery() {
+		return getCandidatesByIdQuery;
+	}
+
+	public static void setGetCandidatesByIdQuery(String getCandidatesByIdQuery) {
+		SQLQuerys.getCandidatesByIdQuery = getCandidatesByIdQuery;
+	}
+
+	public static String getIncrementCandidateVotes() {
+		return incrementCandidateVotes;
+	}
+
+	public static void setIncrementCandidateVotes(String incrementCandidateVotes) {
+		SQLQuerys.incrementCandidateVotes = incrementCandidateVotes;
 	}
 
 }

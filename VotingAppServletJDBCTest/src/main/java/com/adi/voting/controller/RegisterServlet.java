@@ -19,27 +19,11 @@ import java.util.Date;
 import com.adi.voting.dao.UserDAOImpl;
 import com.adi.voting.pojo.UserRequest;
 
-/**
- * Servlet implementation class RegisterServlet
- */
+
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-//	private UserDAOImpl userDAO;
-//	
-//	public void init(ServletConfig config) throws ServletException {
-//		try {
-//			userDAO = new UserDAOImpl();
-//			System.out.println("DAO instance created");
-//		} catch (ClassNotFoundException | SQLException e) {
-//			e.printStackTrace(); // JAVA Compiler
-//			throw new ServletException("Servlet initialization failed",e);	// Web Container
-//		}
-//	}
 	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		try(PrintWriter printWriter = response.getWriter()){
@@ -61,14 +45,11 @@ public class RegisterServlet extends HttpServlet {
             }else {
     			printWriter.print("<h5> User Alreaddy Exsits , " + "Please <a href='login.html'>Login</a></h5>");
             }
-            
-
-            	
+  	
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		
-		
+			
 	}
 
 }

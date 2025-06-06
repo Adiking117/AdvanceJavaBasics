@@ -13,24 +13,35 @@ import static com.adi.voting.utils.DBUtils.openConnection;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import com.adi.voting.dao.CandidateDAOImpl;
 import com.adi.voting.dao.UserDAOImpl;
 
-/**
- * Servlet implementation class WelcomeServlet
- */
-@WebServlet(value = "/welcome",loadOnStartup = 1)
+// @WebServlet(value = "/welcome",loadOnStartup = 1)
 public class WelcomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static UserDAOImpl userDAO;
+	static CandidateDAOImpl candidateDAO;
+	
+	
 
-	/**
-	 * @see Servlet#init(ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
+	public WelcomeServlet() {
+		System.out.println("Welcome Constructor "+ getServletConfig());
+	}
+
+
+	public void init(/*ServletConfig config*/) throws ServletException {
 		try {
-			openConnection();
+			ServletConfig config = getServletConfig();
+			System.out.println("Welcome Init "+ config);
+			
+			openConnection(config.getInitParameter("db_url"),
+					config.getInitParameter("user_name"),
+					config.getInitParameter("password")
+				);
+			
 			userDAO = new UserDAOImpl();
-			System.out.println("Database Connected and DAO instance Created");
+			candidateDAO = new CandidateDAOImpl();
+			System.out.println("Database Connected and DAO instances Created");
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace(); // JAVA Compiler
 			throw new ServletException("Servlet initialization failed",e);	// Web Container
@@ -38,12 +49,10 @@ public class WelcomeServlet extends HttpServlet {
 		
 	}
 
-	/**
-	 * @see Servlet#destroy()
-	 */
 	public void destroy() {
 		try {
 			userDAO.cleanUp();
+			candidateDAO.cleanUp();
 			closeConnection();
 			System.out.println("Servlet Lifecycle ends"
 					+ " and Database Connection closed and Destroyed");
@@ -52,15 +61,5 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		
 	}
-
-	@Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(req.getContextPath() + "/welcome.html");
-    }
-	
-	
-
-
-	
 
 }

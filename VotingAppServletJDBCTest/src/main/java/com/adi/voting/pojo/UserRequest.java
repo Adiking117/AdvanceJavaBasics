@@ -12,7 +12,7 @@ public class UserRequest {
 	private String userRole;
 	
 	public UserRequest() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	

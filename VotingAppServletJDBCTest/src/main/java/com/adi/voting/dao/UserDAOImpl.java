@@ -12,7 +12,10 @@ import static com.adi.voting.utils.DBUtils.*;
 
 public class UserDAOImpl implements UserDAO {
 
-	private PreparedStatement preparedStatementLogin,preparedStatementRegister,preparedStatementUserAlreadyExist;
+	private PreparedStatement preparedStatementLogin,
+	preparedStatementRegister,
+	preparedStatementUserAlreadyExist,
+	preparedStatementUpdateVotingStatus;
 	private Connection connection;
 	
 	public UserDAOImpl() throws ClassNotFoundException, SQLException {
@@ -22,6 +25,7 @@ public class UserDAOImpl implements UserDAO {
 		preparedStatementLogin = connection.prepareStatement(SQLQuerys.getLoginSqlQuery());
 		preparedStatementRegister = connection.prepareStatement(SQLQuerys.getRegisterSqlQuery());
 		preparedStatementUserAlreadyExist = connection.prepareStatement(SQLQuerys.getUserAlreadyExist());
+		preparedStatementUpdateVotingStatus = connection.prepareStatement(SQLQuerys.getUpdateVotingStatus());
 	}
 	
 	@Override
@@ -68,8 +72,7 @@ public class UserDAOImpl implements UserDAO {
 		int userRegister = preparedStatementRegister.executeUpdate();
 		
 		return userRegister == 1;
-		
-		
+
 	}
 	
 	public void cleanUp() throws SQLException {
@@ -82,6 +85,13 @@ public class UserDAOImpl implements UserDAO {
 			preparedStatementRegister = null;
 		}
 		// closeConnection();
+	}
+
+	@Override
+	public boolean updateVotingStatus(int userId) throws SQLException {
+		preparedStatementUpdateVotingStatus.setInt(1, userId);
+		int votingStatusUpdated = preparedStatementUpdateVotingStatus.executeUpdate();
+		return votingStatusUpdated == 1;
 	}
 	
 
