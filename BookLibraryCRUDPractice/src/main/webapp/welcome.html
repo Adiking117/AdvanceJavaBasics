@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to the Library System</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      text-align: center;
+      padding: 50px;
+      color: white;
+    }
+
+    h1 {
+      font-size: 32px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .nav-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      display: inline-block;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nav-container:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin: 15px 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #2575fc;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+      transition: all 0.3s ease-in-out;
+    }
+
+    nav ul li a:hover {
+      background: #2575fc;
+      color: white;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to the Library System</h1>
+
+  <div class="nav-container">
+    <nav>
+      <ul>
+        <li><a href="addBook.html">Add Book</a></li>
+        <li><a href="getBook.html">Get Book</a></li>
+        <li><a href="updateBook.html">Update Book</a></li>
+        <li><a href="deleteBook.html">Delete Book</a></li>
+      </ul>
+    </nav>
+  </div>
+
+</body>
+</html>

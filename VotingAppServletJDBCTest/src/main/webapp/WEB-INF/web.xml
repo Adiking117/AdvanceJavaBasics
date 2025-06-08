@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+  <display-name>VotingAppServletJDBC</display-name>
+  <welcome-file-list>
+    <welcome-file>welcome.html</welcome-file>
+  </welcome-file-list>
+  <servlet>
+		<servlet-name>dbOpen</servlet-name>
+		<servlet-class>com.adi.voting.controller.WelcomeServlet</servlet-class>
+		<!-- add servlet specific init params -->
+		<init-param>
+			<param-name>db_url</param-name>
+			<param-value>jdbc:mysql://localhost:3306/advjava</param-value>
+		</init-param>
+		<init-param>
+			<param-name>user_name</param-name>
+			<param-value>root</param-value>
+		</init-param>
+		<init-param>
+			<param-name>password</param-name>
+			<param-value>Aditya@2003</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dbOpen</servlet-name>
+		<url-pattern>/welcome</url-pattern>
+	</servlet-mapping>
+</web-app>

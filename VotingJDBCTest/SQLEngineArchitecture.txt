@@ -1,0 +1,210 @@
+🛠️ Overview of MySQL SQL Engine Architecture
+Client Interface (Communication)
+
+Parser
+
+Preprocessor
+
+Query Optimizer
+
+Query Execution Engine
+
+Storage Engine (InnoDB, MyISAM, etc.)
+
+Result/Output Handling
+
+📌 Example Query 1: SELECT Statement
+SELECT first_name FROM users WHERE id = 101;
+🔍 1. Client Sends Query
+You (or a program like JDBC) send the SQL query to MySQL Server over a TCP/IP connection (usually port 3306).
+
+🧠 2. Parser
+The SQL Parser checks the query syntax.
+
+It breaks it into tokens: SELECT, first_name, FROM, users, WHERE, id, =, 101.
+
+If there’s a syntax error, the query fails here.
+
+🔐 3. Preprocessor
+The preprocessor checks:
+
+Permissions (does the user have SELECT privileges on users table?)
+
+Table/column existence
+
+Aliases, functions, variable resolution
+
+📈 4. Query Optimizer
+The optimizer figures out the fastest execution plan.
+
+It decides:
+
+Which index to use (e.g., id is indexed)
+
+Whether to do full scan or use B-Tree index
+
+Join order (if multiple tables)
+
+Generates a Query Execution Plan (QEP).
+
+⚙️ 5. Query Execution Engine
+Passes the QEP to the Execution Engine.
+
+The engine interacts with the Storage Engine (e.g., InnoDB) to:
+
+Search B-Tree using id = 101
+
+Retrieve the first_name for that record.
+
+🧱 6. Storage Engine (e.g., InnoDB)
+The engine uses:
+
+Buffer Pool (RAM memory cache)
+
+Redo logs and Undo logs
+
+Retrieves the row efficiently.
+
+Uses locking or MVCC (multi-version concurrency control) if needed.
+
+📤 7. Result Sent to Client
+The row is sent back over the network to the client (like MySQL Workbench, Java JDBC, etc.).
+
+You see the result: first_name = 'Aditya'
+
+
+
+
+📌 Example Query 2: INSERT Statement
+INSERT INTO users (id, first_name, email) VALUES (102, 'Rahul', 'rahul@example.com');
+
+🔄 1–3: Same initial stages (Client → Parser → Preprocessor)
+📈 4. Optimizer
+Determines the best way to insert the row.
+
+Ensures constraints (e.g., PRIMARY KEY, UNIQUE, NOT NULL) are satisfied.
+
+⚙️ 5. Execution Engine
+Prepares the row for writing.
+
+Requests the storage engine to perform the actual insert.
+
+💾 6. Storage Engine (InnoDB)
+Write-ahead Logging (WAL):
+
+First writes to the redo log (used for recovery if crash occurs)
+
+Updates:
+
+Data files (.ibd files)
+
+Index structures (B-Tree updates)
+
+Undo log created (in case of rollback)
+
+If autocommit is ON, transaction is committed immediately.
+
+✅ 7. ACK Sent to Client
+The engine returns success message to the client:
+
+Query OK, 1 row affected
+
+
+🧠 Summary: Behind the Scenes Flow (Simplified)
+
+                Client
+                ↓
+                SQL Parser
+                ↓
+                Preprocessor (Permissions, validation)
+                ↓
+                Query Optimizer (Fastest path planner)
+                ↓
+                Execution Engine
+                ↓
+                Storage Engine (Data retrieval or mutation)
+                ↓
+                Result (or confirmation) sent back to Client
+
+
+🔐 Bonus: Components of MySQL Storage Engine (InnoDB)
+Component	Role
+Buffer Pool	Caches data and index pages
+Redo Log	Stores changes for crash recovery
+Undo Log	Enables rollbacks and MVCC
+B-Tree Indexes	Speeds up search using sorted key structure
+Data Files	.ibd files where actual row data is stored
+
+
+
+
+
+
+
+
+✅ PreparedStatement vs Statement – SQL Execution Plan Difference
+Feature	PreparedStatement	Statement
+Query Plan Reuse	✅ Yes — Plan is created once, then reused	❌ No — New plan is created every time
+SQL Injection Protection	✅ Yes — Inputs are safely parameterized	❌ No — Inputs are directly embedded into SQL
+Performance (with repetition)	⚡ Better — Especially for repeated queries	🐢 Slower — Parses and plans every time
+Syntax	Uses ? placeholders	Uses string concatenation
+Best Use Case	Repeated execution with different values	One-time or simple dynamic queries
+
+🔍 Behind the Scenes:
+🔹 Statement stmt = conn.createStatement();
+
+ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE id = " + userId);
+
+At runtime: SQL = SELECT * FROM users WHERE id = 101
+
+MySQL:
+
+Parses full SQL
+
+Checks privileges
+
+Generates execution plan
+
+Every time you run this, a new plan is created — bad for performance in loops or batch inserts.
+
+
+
+🔹 PreparedStatement pst = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
+
+pst.setInt(1, 101);
+ResultSet rs = pst.executeQuery();
+MySQL:
+
+Parses SELECT * FROM users WHERE id = ? once
+
+Reuses that execution plan for every value of id
+
+Just replaces ? with the new value
+
+🔁 In Batch/Loop:
+PreparedStatement pst = conn.prepareStatement("INSERT INTO users (id, name) VALUES (?, ?)");
+for (User user : usersList) {
+    pst.setInt(1, user.getId());
+    pst.setString(2, user.getName());
+    pst.addBatch();
+}
+pst.executeBatch();
+This is super-efficient!
+
+Single plan, multiple executions.
+
+🚀 TL;DR
+Use PreparedStatement when:
+
+Running the same SQL many times with different values
+
+You want to avoid SQL Injection
+
+You want better performance
+
+Use Statement for:
+
+Quick and simple queries (e.g., one-off admin scripts)
+
+DDL statements (CREATE TABLE, etc.)
+
